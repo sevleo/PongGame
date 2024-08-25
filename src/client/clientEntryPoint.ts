@@ -7,7 +7,7 @@ import {
   KeyboardControls,
   SyncStrategy,
 } from "lance-gg";
-import { InterpolateStrategy } from "lance-gg/src/syncStrategies/InterpolateStrategy.js";
+// import { InterpolateStrategy } from "lance-gg/src/syncStrategies/InterpolateStrategy.js";
 
 // default options, overwritten by query-string options
 // is sent to both game engine and client engine
@@ -33,7 +33,7 @@ function clientSideInit() {
 const gameEngine = new Game(defaults);
 const clientEngine = new ClientEngine(
   gameEngine,
-  new InterpolateStrategy(interpolateSyncStrategyOptions) as any,
+  new ExtrapolateStrategy(interpolateSyncStrategyOptions),
   defaults,
   new Renderer(gameEngine)
 );
