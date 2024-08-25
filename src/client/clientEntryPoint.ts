@@ -33,7 +33,7 @@ function clientSideInit() {
 const gameEngine = new Game(defaults);
 const clientEngine = new ClientEngine(
   gameEngine,
-  new ExtrapolateStrategy(interpolateSyncStrategyOptions),
+  new ExtrapolateStrategy(interpolateSyncStrategyOptions) as any,
   defaults,
   new Renderer(gameEngine)
 );
