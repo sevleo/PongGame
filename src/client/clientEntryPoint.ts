@@ -6,6 +6,7 @@ import {
   ExtrapolateStrategy,
   KeyboardControls,
 } from "lance-gg";
+import { InterpolateStrategy } from "lance-gg/src/syncStrategies/InterpolateStrategy.js";
 
 // default options, overwritten by query-string options
 // is sent to both game engine and client engine
@@ -15,9 +16,9 @@ const defaults = {
   scheduler: "render-schedule",
 };
 
-const extrapolateSyncStrategyOptions = {
-  localObjBending: 0.8,
-  remoteObjBending: 0.8,
+const interpolateSyncStrategyOptions = {
+  localObjBending: 0.2,
+  remoteObjBending: 0.5,
   bendingIncrements: 6,
 };
 
@@ -31,7 +32,7 @@ function clientSideInit() {
 const gameEngine = new Game(defaults);
 const clientEngine = new ClientEngine(
   gameEngine,
-  new ExtrapolateStrategy(extrapolateSyncStrategyOptions),
+  new InterpolateStrategy(interpolateSyncStrategyOptions),
   defaults,
   new Renderer(gameEngine)
 );
