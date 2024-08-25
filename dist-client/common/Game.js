@@ -1,4 +1,4 @@
-import { GameEngine, BaseTypes, TwoVector, DynamicObject, SimplePhysicsEngine } from 'lance-gg';
+import { GameEngine, BaseTypes, TwoVector, DynamicObject, SimplePhysicsEngine, } from "lance-gg";
 const PADDING = 20;
 const WIDTH = 400;
 const HEIGHT = 400;
@@ -12,7 +12,7 @@ class Paddle extends DynamicObject {
     }
     netScheme() {
         return Object.assign({
-            health: { type: BaseTypes.Int16 }
+            health: { type: BaseTypes.Int16 },
         }, super.netScheme());
     }
     syncTo(other) {
@@ -35,13 +35,13 @@ export default class Game extends GameEngine {
         super(options);
         this.physicsEngine = new SimplePhysicsEngine({ gameEngine: this });
         // common code
-        this.on('postStep', this.gameLogic.bind(this));
+        this.on("postStep", this.gameLogic.bind(this));
         // server-only code
-        this.on('server__init', this.serverSideInit.bind(this));
-        this.on('server__playerJoined', this.serverSidePlayerJoined.bind(this));
-        this.on('server__playerDisconnected', this.serverSidePlayerDisconnected.bind(this));
+        this.on("server__init", this.serverSideInit.bind(this));
+        this.on("server__playerJoined", this.serverSidePlayerJoined.bind(this));
+        this.on("server__playerDisconnected", this.serverSidePlayerDisconnected.bind(this));
         // client-only code
-        this.on('client__draw', this.clientSideDraw.bind(this));
+        this.on("client__draw", this.clientSideDraw.bind(this));
     }
     registerClasses(serializer) {
         serializer.registerClass(Paddle);
@@ -54,7 +54,8 @@ export default class Game extends GameEngine {
             return;
         // CHECK LEFT EDGE:
         if (ball.position.x <= PADDING + PADDLE_WIDTH &&
-            ball.position.y >= paddles[0].y && ball.position.y <= paddles[0].position.y + PADDLE_HEIGHT &&
+            ball.position.y >= paddles[0].y &&
+            ball.position.y <= paddles[0].position.y + PADDLE_HEIGHT &&
             ball.velocity.x < 0) {
             // ball moving left hit player 1 paddle
             ball.velocity.x *= -1;
@@ -69,7 +70,8 @@ export default class Game extends GameEngine {
         }
         // CHECK RIGHT EDGE:
         if (ball.position.x >= WIDTH - PADDING - PADDLE_WIDTH &&
-            ball.position.y >= paddles[1].position.y && ball.position.y <= paddles[1].position.y + PADDLE_HEIGHT &&
+            ball.position.y >= paddles[1].position.y &&
+            ball.position.y <= paddles[1].position.y + PADDLE_HEIGHT &&
             ball.velocity.x > 0) {
             // ball moving right hits player 2 paddle
             ball.velocity.x *= -1;
@@ -97,10 +99,10 @@ export default class Game extends GameEngine {
         // get the player paddle tied to the player socket
         let playerPaddle = this.world.queryOneObject({ playerId });
         if (playerPaddle) {
-            if (inputData.input === 'ArrowUp') {
+            if (inputData.input === "ArrowUp") {
                 playerPaddle.position.y -= 5;
             }
-            else if (inputData.input === 'ArrowDown') {
+            else if (inputData.input === "ArrowDown") {
                 playerPaddle.position.y += 5;
             }
         }
@@ -114,18 +116,24 @@ export default class Game extends GameEngine {
             playerId: 0,
             position: new TwoVector(PADDING, 0),
             velocity: new TwoVector(0, 0),
-            width: 0, height: 0, isStatic: 0
+            width: 0,
+            height: 0,
+            isStatic: 0,
         }));
         this.addObjectToWorld(new Paddle(this, {}, {
             playerId: 0,
             position: new TwoVector(WIDTH - PADDING, 0),
             velocity: new TwoVector(0, 0),
-            width: 0, height: 0, isStatic: 0
+            width: 0,
+            height: 0,
+            isStatic: 0,
         }));
         this.addObjectToWorld(new Ball(this, {}, {
             position: new TwoVector(WIDTH / 2, HEIGHT / 2),
             velocity: new TwoVector(2, 2),
-            width: 0, height: 0, isStatic: 0
+            width: 0,
+            height: 0,
+            isStatic: 0,
         }));
     }
     // attach newly connected player to next available paddle
@@ -153,16 +161,16 @@ export default class Game extends GameEngine {
     clientSideDraw() {
         function updateEl(el, obj) {
             let health = obj.health > 0 ? obj.health : 15;
-            el.style.top = obj.position.y + 10 + 'px';
-            el.style.left = obj.position.x + 'px';
+            el.style.top = obj.position.y + 10 + "px";
+            el.style.left = obj.position.x + "px";
             el.style.background = `#ff${health.toString(16)}f${health.toString(16)}f`;
         }
         let paddles = this.world.queryObjects({ instanceType: Paddle });
         let ball = this.world.queryOneObject({ instanceType: Ball });
         if (!ball || paddles.length !== 2)
             return;
-        updateEl(document.querySelector('.ball'), ball);
-        updateEl(document.querySelector('.paddle1'), paddles[0]);
-        updateEl(document.querySelector('.paddle2'), paddles[1]);
+        updateEl(document.querySelector(".ball"), ball);
+        updateEl(document.querySelector(".paddle1"), paddles[0]);
+        updateEl(document.querySelector(".paddle2"), paddles[1]);
     }
 }
