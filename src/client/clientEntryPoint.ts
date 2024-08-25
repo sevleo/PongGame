@@ -11,7 +11,7 @@ import {
 // is sent to both game engine and client engine
 const defaults = {
   traceLevel: Lib.Trace.TRACE_NONE,
-  delayInputCount: 300,
+  delayInputCount: 5,
   scheduler: "render-schedule",
 };
 
